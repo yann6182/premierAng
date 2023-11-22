@@ -1,0 +1,16 @@
+<div class="container mt-4">
+  <h2>Accueil</h2>
+  <div class="d-flex">
+    <app-regions *ngFor="let region of regions" [region]="region" (regionClick)="onRegionClick($event)"></app-regions>
+  </div>
+
+  <div *ngIf="selectedRegion">
+    <h3>Sous-régions de {{ selectedRegion.name }}</h3>
+    <app-sous-regions *ngFor="let sousRegion of sousRegions" [sousRegion]="sousRegion" (sousRegionClick)="onSousRegionClick($event)"></app-sous-regions>
+  </div>
+
+  <div *ngIf="selectedSousRegion">
+    <h3>Pays de& {{ selectedSousRegion.name }} ({{ selectedSousRegion.region.name }})</h3>
+    <app-pays *ngFor="let paysItem of pays" [pays]="paysItem"></app-pays>
+  </div>
+</div>
