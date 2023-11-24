@@ -3,6 +3,8 @@ import { PaysService } from '../services/pays.service';
 import { Region } from '../models/region.model';
 import { SousRegion } from '../models/sousregion.model';
 import { Country } from '../models/country.model';
+import { Observable, filter,map,BehaviorSubject, combineLatest } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-acceuil',
@@ -10,33 +12,72 @@ import { Country } from '../models/country.model';
   styleUrls: ['./acceuil.component.scss']
 })
 export class AcceuilComponent implements OnInit {
-  regions: Region[] = [];
-  sousRegions: SousRegion[] = [];
-  pays: Country[] = [];
+  regions$: Observable<Region[]> | undefined;
+  sousRegions$: Observable<SousRegion[]>| undefined;
   selectedRegion?: Region;
   selectedSousRegion?: SousRegion;
-  constructor(private paysService: PaysService) {}
+  totalItems: number = 0; 
+  currentPage: number = 1;
+  pageSize = 10;
+  searchText = '';
+  paysArray: Country[] = [];
+  paginatedPays: any[] = [];
+  filteredPays: any[] = [];
+  totalItems$: Observable<number> | undefined;
+  private currentPageSubject = new BehaviorSubject<number>(1);
+currentPage$ = this.currentPageSubject.asObservable();
+
+private pageSizeSubject = new BehaviorSubject<number>(10);
+pageSize$ = this.pageSizeSubject.asObservable();
+
+private paysSubject = new BehaviorSubject<Country[]>([]);
+pays$ = this.paysSubject.asObservable();
+
+paginatedPays$: Observable<Country[]> | undefined;
+
+  constructor(private paysService: PaysService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
-    this.loadRegions();
+    this.regions$ = this.paysService.getRegions();
+    this.paginatedPays$ = combineLatest([
+      this.currentPage$,
+      this.pageSize$,
+      this.pays$
+    ]).pipe(
+      map(([currentPage, pageSize, pays]) => {
+        const startIndex = (currentPage - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        return pays.slice(startIndex, endIndex);
+      })
+    );
   }
+  
+  private updatePaginatedPays(): void {
+    if (this.pays$) {
+      this.pays$.pipe(
+        map((pays: Country[]) => {
+          const startIndex = (this.currentPage - 1) * this.pageSize;
+          const endIndex = startIndex + this.pageSize;
 
+          return pays.slice(startIndex, endIndex);
+        })
+      ).subscribe((paginatedPays: Country[]) => {
+        this.paginatedPays = paginatedPays;
+      });
+    }
+  }
   loadRegions() {
-    this.paysService.getRegions().subscribe((regions) => {
-      this.regions = regions;
-    });
+    this.regions$ = this.paysService.getRegions();
   }
 
   loadSousRegions(region: Region) {
-    this.paysService.getSousRegions(region).subscribe((sousRegions) => {
-      this.sousRegions = sousRegions;
-    });
+    this.selectedRegion = region;
+    this.sousRegions$ = this.paysService.getSousRegions(region);
   }
 
   loadPays(sousRegion: SousRegion) {
-    this.paysService.getPays(sousRegion).subscribe((pays) => {
-      this.pays = pays;
-    });
+    this.selectedSousRegion = sousRegion;
+    this.pays$ = this.paysService.getPays(sousRegion);
   }
   onRegionClick(region: Region) {
     this.loadSousRegions(region);
@@ -44,6 +85,48 @@ export class AcceuilComponent implements OnInit {
 
   onSousRegionClick(sousRegion: SousRegion) {
     this.loadPays(sousRegion);
+  }
+  
+
+  onPageChange(event: any): void {
+    this.currentPage = event.page;
+    this.updatePaginatedPays();
+  }
+
+
+
+  
+
+  containsSearchText(paysItem: Country): boolean {
+    const searchTerms = this.searchText.toLowerCase().split(' ');
+    for (const term of searchTerms) {
+      if (
+        paysItem.name.common.toLowerCase().includes(term) ||
+        paysItem.name.official.toLowerCase().includes(term)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  onSearch(): void {
+    if (this.searchText.trim() !== '') {
+      this.pays$ = this.pays$.pipe(
+        map((pays) =>
+          pays.filter((paysItem) => this.containsSearchText(paysItem))
+        )
+      );
+      this.toastr.success('Recherche effectuée avec succès');
+    } else {
+      if (this.selectedSousRegion) {
+        this.loadPays(this.selectedSousRegion);
+        this.toastr.success('Champ de recherche vide. Affichage de tous les pays.');
+      } else {
+        this.loadRegions();
+        this.toastr.success('Champ de recherche vide. Affichage de toutes les regions.');}
+    }
+    this.updatePaginatedPays();
   }
  
 }
