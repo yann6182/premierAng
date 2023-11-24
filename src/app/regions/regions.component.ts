@@ -13,6 +13,7 @@ export class RegionsComponent {
   @Output() regionClick = new EventEmitter<Region>();
 
   regionClicked() {
+    console.log('Region clicked:', this.region);
     this.regionClick.emit(this.region);
   }
 

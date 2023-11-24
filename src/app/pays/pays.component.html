@@ -1,6 +1,14 @@
-<div (click)="paysClicked()">
-    <h4>{{ pays.name.common }}</h4>
-    <p>Population: {{ pays.population }}</p>
-    <img [src]="pays.flags.png" alt=""/>
-    <p>Capitale: {{ pays.capital[0] }}</p>
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img [src]="pays.flags.png" alt="Drapeau de {{ pays.name.common }}" class="img-fluid">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{ pays.name.common }}</h5>
+        <p class="card-text">Capitale: {{ pays.capital[0] }}</p>
+        <p class="card-text">Population: {{ pays.population | number }}</p>
+      </div>
+    </div>
   </div>
+</div>

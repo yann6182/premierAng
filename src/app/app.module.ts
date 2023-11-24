@@ -13,6 +13,9 @@ import { AproposComponent } from './apropos/apropos.component';
 import { RegionsComponent } from './regions/regions.component';
 import { SousRegionsComponent } from './sous-regions/sous-regions.component';
 import { PaysComponent } from './pays/pays.component';
+import { ToastrModule } from 'ngx-toastr';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,9 +28,11 @@ import { PaysComponent } from './pays/pays.component';
     SousRegionsComponent,
     PaysComponent,
     
+    
    
   ],
-  imports: [BrowserModule, AppRoutingModule,HttpClientModule, BrowserAnimationsModule],
+  imports: [BrowserModule, AppRoutingModule,HttpClientModule, BrowserAnimationsModule,
+    PaginationModule.forRoot(),  ToastrModule.forRoot(), FormsModule],
   providers: [HttpClient],
   bootstrap: [AppComponent],
 })
