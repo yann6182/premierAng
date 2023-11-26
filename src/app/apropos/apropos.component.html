@@ -1,1 +1,11 @@
-<p>apropos works!</p>
+<h2>À Propos de Notre Application</h2>
+
+<bar-rating [(rate)]="rate" (rateChange)="handleRate($event)" [max]="5">
+    <ng-template ratingActive>
+       <i class="bi bi-star-fill"></i>
+    </ng-template>
+    <ng-template ratingInactive>
+       <i class="bi bi-star-fill" ></i>
+    </ng-template>
+ </bar-rating>
+ <p>Merci de noter notre application !</p>

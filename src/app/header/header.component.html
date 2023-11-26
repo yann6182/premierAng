@@ -1,15 +1,22 @@
 <header class="navbar">
     <div class="container">
-      <img src="assets/img/logo.png" alt="Logo" class="logo">
+      <img src="assets/img/NOUV.PNG" alt="Logo" class="logo">
       <ul class="nav justify-content-end">
         <li class="nav-item"><a routerLink="/accueil" class="nav-link">Accueil</a></li>
         <li class="nav-item"><a routerLink="/apropos" class="nav-link">A Propos</a></li>
         <li class="nav-item">
-            <a class="nav-link" routerLink="/notification">
-              <i class="bi bi-bell"></i> 
-              <img src="assets/img/bell-fill.svg" alt="notifications">
-            </a>
-          </li>     </ul>
+          <a class="nav-link" routerLink="/score">
+             <i class="bi bi-star"></i>
+             {{ currentScore }}
+          </a>
+       </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/notification">
+            <i class="bi bi-bell"></i>
+            <img src="assets/img/bell-fill.svg" alt="notifications">
+            <span *ngIf="searchResultsCount > 0" class="badge badge-pill badge-danger">{{ searchResultsCount }}</span>
+          </a>
+        </li>    </ul>
     </div>
   </header>
   

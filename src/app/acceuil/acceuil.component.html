@@ -1,5 +1,15 @@
+
+
+
+<div>
+  {{ notification$ | async }}
+</div>
+
 <div class="d-flex">
   <app-regions *ngFor="let region of regions$ | async" [region]="region" (regionClick)="loadSousRegions($event)"></app-regions>
+
+
+
 </div>
 
 <div *ngIf="selectedRegion" class="mt-4" class="list-group">
@@ -20,7 +30,10 @@
     [pays]="paysItem"></app-pays>
   
 </div>
-
+<app-statistic [data_country]="graphAfrique$ | async" [dataIsLoaded]="true" [dataIsLoading]="false"></app-statistic>
+<app-statistic [data_country]="graphEurope$ | async" [dataIsLoaded]="true" [dataIsLoading]="false"></app-statistic>
+<app-statistic [data_country]="graphAsia$ | async" [dataIsLoaded]="true" [dataIsLoading]="false"></app-statistic>
+<app-statistic [data_country]="graphAmerica$ | async " [dataIsLoaded]="true" [dataIsLoading]="false"></app-statistic>
 
 
 
