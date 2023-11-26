@@ -16,7 +16,9 @@ import { PaysComponent } from './pays/pays.component';
 import { ToastrModule } from 'ngx-toastr';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FormsModule } from '@angular/forms';
-
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { StatisticComponent } from './statistic/statistic.component';
+import { BarRatingModule } from 'ngx-bar-rating';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,12 +29,13 @@ import { FormsModule } from '@angular/forms';
     RegionsComponent,
     SousRegionsComponent,
     PaysComponent,
+    StatisticComponent,
     
     
    
   ],
-  imports: [BrowserModule, AppRoutingModule,HttpClientModule, BrowserAnimationsModule,
-    PaginationModule.forRoot(),  ToastrModule.forRoot(), FormsModule],
+  imports: [BrowserModule, AppRoutingModule,HttpClientModule, BrowserAnimationsModule, NgxChartsModule,
+    PaginationModule.forRoot(),  ToastrModule.forRoot(), FormsModule, BarRatingModule],
   providers: [HttpClient],
   bootstrap: [AppComponent],
 })

@@ -22,7 +22,12 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "types": ["d3-shape", "d3-scale", "d3-selection"]
+
+    
+    
+
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

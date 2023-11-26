@@ -1,7 +1,6 @@
-// pays.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Region } from '../models/region.model';
 import { SousRegion } from '../models/sousregion.model';
@@ -67,4 +66,11 @@ export class PaysService {
       })
     );
   }
+
+  getGraphData(region: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/api/data/${region}`);
+  }
+
+
+
 }
